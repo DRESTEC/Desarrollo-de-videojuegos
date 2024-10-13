@@ -123,8 +123,8 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: Sprite-0002_Frame_0
     originalName: 
-    pivot: {x: 0.49999994, y: -0.2857143}
-    alignment: 9
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -143,8 +143,8 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 4}
   - name: Sprite-0002_Frame_1
     originalName: 
-    pivot: {x: 0.49999994, y: -0.23809525}
-    alignment: 9
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
