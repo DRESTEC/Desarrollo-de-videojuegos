@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyPrefab; // Prefab del enemigo
-    public Transform spawnPoint; // Punto específico donde aparecerá el enemigo
-    public float spawnInterval = 2f; // Intervalo de aparición (en segundos)
+    public Transform spawnPoint; // Punto especï¿½fico donde aparecerï¿½ el enemigo
+    public float spawnInterval = 2f; // Intervalo de apariciï¿½n (en segundos)
 
     private float timeSinceLastSpawn = 0f;
 
