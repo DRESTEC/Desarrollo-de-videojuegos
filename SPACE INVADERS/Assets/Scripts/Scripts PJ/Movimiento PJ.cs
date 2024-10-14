@@ -61,17 +61,14 @@ public class MovimientoPJ : MonoBehaviour
     }
 
     // Cuando empieza a colisionar con un enemigo
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemigo"))
+        private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (corutinaDanio == null)
+            if (collision.gameObject.CompareTag("Enemigo"))
             {
-                // Inicia la corutina para recibir daño constante mientras esté en contacto con el enemigo
-                corutinaDanio = StartCoroutine(RecibirDanioContinuo(10, 1f));
+                // Destruye al enemigo al tocarlo
+               //Destroy(collision.gameObject);
             }
         }
-    }
 
     // Mientras sigue en contacto con el enemigo
     private void OnCollisionStay2D(Collision2D collision)
@@ -108,4 +105,5 @@ public class MovimientoPJ : MonoBehaviour
             yield return new WaitForSeconds(intervalo); // Espera antes de volver a hacer daño
         }
     }
+    
 }
