@@ -11,9 +11,10 @@ public class MovimientoPJ : MonoBehaviour
     private Animator animator;
     private SpriteRenderer spritePJ;
     private int VidaActual;
-
+ 
     private bool enContactoConEnemigo = false; // Bandera para saber si está en contacto con un enemigo
     private Coroutine corutinaDanio; // Para almacenar la corutina del daño
+    private Coroutine corutinaDañoContinuo; // Para controlar la corutina
     
 
     private void Awake()
@@ -45,7 +46,7 @@ public class MovimientoPJ : MonoBehaviour
     public void RecibirDanio(int cantidad)
     {
         VidaActual -= cantidad;  // Reducir la vida
-
+        Debug.Log("vida actual:  "+ VidaActual);
         if (VidaActual <= 0)
         {
             Morir();  // Llamar al método de morir si la vida es 0 o menos
@@ -56,19 +57,11 @@ public class MovimientoPJ : MonoBehaviour
     private void Morir()
     {
         Debug.Log("El personaje ha muerto.");
-        // Aquí puedes agregar lógica para la muerte, como reproducir una animación o destruir el objeto
-        // Destroy(gameObject);
+        FindAnyObjectByType<GameOver>().MostrarGameOver();
+        Debug.Log("El jugador ha sido destruido por un enemigo.");
     }
-
-    // Cuando empieza a colisionar con un enemigo
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            if (collision.gameObject.CompareTag("Enemigo"))
-            {
-                // Destruye al enemigo al tocarlo
-               //Destroy(collision.gameObject);
-            }
-        }
+ 
+   
 
     // Mientras sigue en contacto con el enemigo
     private void OnCollisionStay2D(Collision2D collision)
@@ -81,29 +74,28 @@ public class MovimientoPJ : MonoBehaviour
 
     // Cuando deja de colisionar con un enemigo
     private void OnCollisionExit2D(Collision2D collision)
+{
+    if (collision.gameObject.CompareTag("Enemigo"))
     {
-        if (collision.gameObject.CompareTag("Enemigo"))
+        enContactoConEnemigo = false;
+        // Si se deja de tocar al enemigo, detener la corutina
+        if (corutinaDañoContinuo != null)
         {
-            enContactoConEnemigo = false;
-
-            // Detenemos la corutina si ya no está en contacto con el enemigo
-            if (corutinaDanio != null)
-            {
-                StopCoroutine(corutinaDanio);
-                corutinaDanio = null;
-            }
+            StopCoroutine(corutinaDañoContinuo);
+            corutinaDañoContinuo = null;
         }
     }
+}
 
     // Corutina para recibir daño constante
     private IEnumerator RecibirDanioContinuo(int cantidadDanio, float intervalo)
+{
+    // Mientras esté en contacto con un enemigo, se ejecuta el ciclo
+    while (enContactoConEnemigo)
     {
-        // Mientras esté en contacto con un enemigo, se ejecuta el ciclo
-        while (enContactoConEnemigo)
-        {
-            RecibirDanio(cantidadDanio); // Reduce vida
-            yield return new WaitForSeconds(intervalo); // Espera antes de volver a hacer daño
-        }
+        GetComponent<MovimientoPJ>().RecibirDanio(cantidadDanio); // Reduce vida en el script MovimientoPJ
+        yield return new WaitForSeconds(intervalo); // Espera 2 segundos antes de volver a hacer daño
     }
+}
     
 }

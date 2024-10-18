@@ -7,6 +7,7 @@ public class Enemigo : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
     [SerializeField] private float vida = 100f;
+      [SerializeField] private int dañoAlJugador = 20;
 
     private Transform player;
 
@@ -32,15 +33,19 @@ public class Enemigo : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, angle); // Para 2D, rotamos sobre el eje Z
         }
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
+   private void OnCollisionEnter2D(Collision2D collision)
     {
         // Verificamos si el objeto con el que colisionamos tiene el tag "Player"
         if (collision.gameObject.CompareTag("Player"))
         {
-            // Destruir o manejar el fin del juego cuando el enemigo colisiona con el jugador
-            FindAnyObjectByType<GameOver>().MostrarGameOver();
-            Debug.Log("El jugador ha sido destruido por un enemigo.");
+            // Reducir la vida del jugador
+            MovimientoPJ playerController = collision.gameObject.GetComponent<MovimientoPJ>();
+            if (playerController != null)
+            {
+                playerController.RecibirDanio(dañoAlJugador);
+            }
+
+            Debug.Log("El jugador ha sido dañado por un enemigo.");
         }
     }
 
@@ -53,4 +58,17 @@ public class Enemigo : MonoBehaviour
             Destroy(gameObject); // Destruye al enemigo si su vida llega a 0
         }
     }
+     
+        public void RecibirDanio(float daño)
+    {
+        vida -= daño;
+        if (vida <= 0)
+        {
+            Destroy(gameObject); // Destruye al enemigo si su vida llega a 0
+        }
+    }
+
+
+    // Método para recibir daño
+ 
 }

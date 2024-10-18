@@ -14,6 +14,7 @@ public class Disparos : MonoBehaviour
         if(Input.GetButtonDown("Fire1")){
             Disparar();
         }
+        
     }
     private void Disparar(){
         Quaternion rotacionBala = origenBalas.rotation * Quaternion.Euler(0, 0, -90); // Corrige 90 grados si está mal orientada
