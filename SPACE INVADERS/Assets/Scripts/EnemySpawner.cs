@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour
 
     private float timeSinceLastSpawn = 0f;
 
-    void Update()
+    public void Update()
     {
         timeSinceLastSpawn += Time.deltaTime;
 
@@ -21,7 +21,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    void SpawnEnemy()
+    public void SpawnEnemy()
     {
         Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
     }
