@@ -1,17 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MovimientoPJ : MonoBehaviour
 {
     [SerializeField] private float Velocidad;
-    [SerializeField] private int VidaMaxima = 100;
+    [SerializeField] private int VidaMaxima = 5;
+    [SerializeField] private Image[] corazones;  // Array de imágenes de corazones
+    [SerializeField] private Sprite corazonLleno; // Sprite de corazón lleno
+    [SerializeField] private Sprite corazonVacio; // Sprite de corazón vacío
+    [SerializeField] private AudioSource audioSource;  // Referencia al AudioSource
+    [SerializeField] private AudioClip sonidoMovimiento; // Clip de sonido de movimiento
 
     private Rigidbody2D Movimiento;
     private Animator animator;
     private SpriteRenderer spritePJ;
     private int VidaActual;
- 
+    private bool estaMoviendose = false; // Bandera para saber si ya está moviéndose
+
     private bool enContactoConEnemigo = false; // Bandera para saber si está en contacto con un enemigo
     private Coroutine corutinaDanio; // Para almacenar la corutina del daño
     private Coroutine corutinaDañoContinuo; // Para controlar la corutina
@@ -23,6 +30,7 @@ public class MovimientoPJ : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         spritePJ = GetComponentInChildren<SpriteRenderer>();
         VidaActual = VidaMaxima;
+        ActualizarCorazones();
     }
 
     private void FixedUpdate()
@@ -32,6 +40,25 @@ public class MovimientoPJ : MonoBehaviour
 
         Movimiento.velocity = new Vector2(Horizontal, Vertical) * Velocidad;
         animator.SetFloat("Camina", Mathf.Abs(Movimiento.velocity.magnitude));
+
+        if (Horizontal != 0 || Vertical != 0)
+        {
+            // Si el personaje se está moviendo y el sonido aún no se ha reproducido
+            if (!estaMoviendose)
+            {
+                estaMoviendose = true; // Marca que el personaje está en movimiento
+                audioSource.Play(); // Reproduce el sonido una sola vez
+            }
+        }
+        else
+        {
+            // Si el personaje deja de moverse
+            if (estaMoviendose)
+            {
+                audioSource.Stop();
+                estaMoviendose = false; // Marca que el personaje ha dejado de moverse
+            }
+        }
 
         if (Horizontal > 0)
         {
@@ -46,12 +73,29 @@ public class MovimientoPJ : MonoBehaviour
     public void RecibirDanio(int cantidad)
     {
         VidaActual -= cantidad;  // Reducir la vida
+        ActualizarCorazones();  // Actualiza la visualización de los corazones
         Debug.Log("vida actual:  "+ VidaActual);
         if (VidaActual <= 0)
         {
             Morir();  // Llamar al método de morir si la vida es 0 o menos
         }
-    }   
+    }
+
+    private void ActualizarCorazones()
+    {
+        // Cambia el sprite del corazón según la vida actual
+        for (int i = 0; i < corazones.Length; i++)
+        {
+            if (i < VidaActual)
+            {
+                corazones[i].sprite = corazonLleno;  // Muestra el corazón lleno
+            }
+            else
+            {
+                corazones[i].sprite = corazonVacio; // Muestra el corazón vacío
+            }
+        }
+    }
 
     // Método para morir
     private void Morir()

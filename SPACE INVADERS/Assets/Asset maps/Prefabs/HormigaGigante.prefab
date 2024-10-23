@@ -147,6 +147,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   vida: 100
+  "da\xF1oAlJugador": 1
+  cantidadPuntos: 10
 --- !u!50 &3808655566521527538
 Rigidbody2D:
   serializedVersion: 4

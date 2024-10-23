@@ -9,6 +9,7 @@ public class EnemySpawner : MonoBehaviour
     public float spawnInterval = 2f; // Intervalo de aparición (en segundos)
     [SerializeField] private Puntaje puntaje; // Referencia al sistema de puntaje
 
+
     private float timeSinceLastSpawn = 0f;
 
     public void Update()

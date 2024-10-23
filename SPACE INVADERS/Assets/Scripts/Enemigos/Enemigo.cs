@@ -7,7 +7,7 @@ public class Enemigo : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
     [SerializeField] private float vida = 100f;
-    [SerializeField] private int dañoAlJugador = 20;
+    [SerializeField] private int dañoAlJugador = 1;
     [SerializeField] private float cantidadPuntos = 10;
     
     private Puntaje puntaje; // Referencia al sistema de puntaje
