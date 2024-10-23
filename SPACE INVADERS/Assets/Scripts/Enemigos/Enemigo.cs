@@ -7,7 +7,10 @@ public class Enemigo : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
     [SerializeField] private float vida = 100f;
-      [SerializeField] private int dañoAlJugador = 20;
+    [SerializeField] private int dañoAlJugador = 20;
+    [SerializeField] private float cantidadPuntos = 10;
+    
+    private Puntaje puntaje; // Referencia al sistema de puntaje
 
     private Transform player;
 
@@ -19,26 +22,20 @@ public class Enemigo : MonoBehaviour
 
     void Update()
     {
-        // Mueve el enemigo hacia el jugador
         if (player != null)
         {
-            // Dirección hacia el jugador
             Vector3 direction = (player.position - transform.position).normalized;
-
-            // Mueve al enemigo hacia el jugador
             transform.position += direction * speed * Time.deltaTime;
 
-            // Rotación del enemigo para que mire al jugador
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle); // Para 2D, rotamos sobre el eje Z
+            transform.rotation = Quaternion.Euler(0, 0, angle);
         }
     }
-   private void OnCollisionEnter2D(Collision2D collision)
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Verificamos si el objeto con el que colisionamos tiene el tag "Player"
         if (collision.gameObject.CompareTag("Player"))
         {
-            // Reducir la vida del jugador
             MovimientoPJ playerController = collision.gameObject.GetComponent<MovimientoPJ>();
             if (playerController != null)
             {
@@ -54,21 +51,19 @@ public class Enemigo : MonoBehaviour
     {
         vida -= daño;
         if (vida <= 0)
-        {
+        {   
+            // Sumar puntos al destruir al enemigo
+            if (puntaje != null)
+            {
+                puntaje.SumarPuntos(cantidadPuntos);
+            }
             Destroy(gameObject); // Destruye al enemigo si su vida llega a 0
         }
     }
-     
-        public void RecibirDanio(float daño)
+
+    // Asignar el puntaje dinámicamente
+    public void SetPuntaje(Puntaje puntajeReferencia)
     {
-        vida -= daño;
-        if (vida <= 0)
-        {
-            Destroy(gameObject); // Destruye al enemigo si su vida llega a 0
-        }
-    }
-
-
-    // Método para recibir daño
- 
+        puntaje = puntajeReferencia;
+    }
 }
